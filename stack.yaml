@@ -1,80 +1,96 @@
-AWSTemplateFormatVersion: 2010-09-09
-
-Parameters:
-  Name:
-    Type: String
-    Description: ShravaniDemo
-
-  Repository:
-    Type: String
-    Description: https://github.com/shravanighatage20/cloudformation-2.git
-
-  Branch:
-    Type: String
-    Description: Github Repository Branch
-    Default: master
-
-  OauthToken:
-    Type: String
-    Description: https://github.com/shravanighatage20/cloudformation-2.git
-    NoEcho: true
-
-  Domain:
-    Type: String
-    Description: Domain name to host application
-    Default: ""
-
-Conditions: 
-  UseCustomDomain: !Not [!Equals [!Ref Domain, ""]]
-
+AWSTemplateFormatVersion: '2010-09-09'
 Resources:
-  AmplifyRole:
-    Type: AWS::IAM::Role
+  MyDynamoDBTable:
+    Type: 'AWS::DynamoDB::Table'
     Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - amplify.amazonaws.com
-            Action:
-              - sts:AssumeRole
-      Policies:
-        - PolicyName: Amplify
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action: "amplify:*"
-                Resource: "*"
+      TableName: ShravaniCloudFormation
+      AttributeDefinitions:
+        - AttributeName: Id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
 
-  AmplifyApp:
-    Type: "AWS::Amplify::App"
-    Properties:
-      Name: !Ref Name
-      Repository: !Ref Repository
-      OauthToken: !Ref OauthToken
-      IAMServiceRole: !GetAtt AmplifyRole.Arn
+# AWSTemplateFormatVersion: 2010-09-09
 
-  AmplifyBranch:
-    Type: AWS::Amplify::Branch
-    Properties:
-      BranchName: !Ref Branch
-      AppId: !GetAtt AmplifyApp.AppId
-      EnableAutoBuild: true
+# Parameters:
+#   Name:
+#     Type: String
+#     Description: ShravaniDemo
 
-  AmplifyDomain:
-    Type: AWS::Amplify::Domain
-    Condition: UseCustomDomain
-    Properties:
-      DomainName: !Ref Domain
-      AppId: !GetAtt AmplifyApp.AppId
-      SubDomainSettings:
-        - Prefix: master
-          BranchName: !GetAtt AmplifyBranch.BranchName
+#   Repository:
+#     Type: String
+#     Description: https://github.com/shravanighatage20/cloudformation-2.git
 
-Outputs:
-  DefaultDomain:
-    Value: !GetAtt AmplifyApp.DefaultDomain
-    Condition: UseCustomDomain
+#   Branch:
+#     Type: String
+#     Description: Github Repository Branch
+#     Default: master
+
+#   OauthToken:
+#     Type: String
+#     Description: https://github.com/shravanighatage20/cloudformation-2.git
+#     NoEcho: true
+
+#   Domain:
+#     Type: String
+#     Description: Domain name to host application
+#     Default: ""
+
+# Conditions: 
+#   UseCustomDomain: !Not [!Equals [!Ref Domain, ""]]
+
+# Resources:
+#   AmplifyRole:
+#     Type: AWS::IAM::Role
+#     Properties:
+#       AssumeRolePolicyDocument:
+#         Version: 2012-10-17
+#         Statement:
+#           - Effect: Allow
+#             Principal:
+#               Service:
+#                 - amplify.amazonaws.com
+#             Action:
+#               - sts:AssumeRole
+#       Policies:
+#         - PolicyName: Amplify
+#           PolicyDocument:
+#             Version: 2012-10-17
+#             Statement:
+#               - Effect: Allow
+#                 Action: "amplify:*"
+#                 Resource: "*"
+
+#   AmplifyApp:
+#     Type: "AWS::Amplify::App"
+#     Properties:
+#       Name: !Ref Name
+#       Repository: !Ref Repository
+#       OauthToken: !Ref OauthToken
+#       IAMServiceRole: !GetAtt AmplifyRole.Arn
+
+#   AmplifyBranch:
+#     Type: AWS::Amplify::Branch
+#     Properties:
+#       BranchName: !Ref Branch
+#       AppId: !GetAtt AmplifyApp.AppId
+#       EnableAutoBuild: true
+
+#   AmplifyDomain:
+#     Type: AWS::Amplify::Domain
+#     Condition: UseCustomDomain
+#     Properties:
+#       DomainName: !Ref Domain
+#       AppId: !GetAtt AmplifyApp.AppId
+#       SubDomainSettings:
+#         - Prefix: master
+#           BranchName: !GetAtt AmplifyBranch.BranchName
+
+# Outputs:
+#   DefaultDomain:
+#     Value: !GetAtt AmplifyApp.DefaultDomain
+#     Condition: UseCustomDomain
