@@ -3,11 +3,11 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   Name:
     Type: String
-    Description: Name of the app
+    Description: ShravaniDemo
 
   Repository:
     Type: String
-    Description: GitHub Repository URL
+    Description: https://github.com/shravanighatage20/cloudformation-2.git
 
   Branch:
     Type: String
@@ -16,7 +16,7 @@ Parameters:
 
   OauthToken:
     Type: String
-    Description: GitHub Repository URL
+    Description: https://github.com/shravanighatage20/cloudformation-2.git
     NoEcho: true
 
   Domain:
